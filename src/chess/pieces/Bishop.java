@@ -2,7 +2,7 @@ package chess.pieces;
 
 import chess.playboard.Initializer;
 
-public class Bishop extends ChessPiece {
+public class Bishop extends Piece {
     
     /** Creates a new Bishop piece.
      * @param owner Owner string.

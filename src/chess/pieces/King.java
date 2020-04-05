@@ -3,7 +3,7 @@ package chess.pieces;
 import chess.playboard.TurnHandler;
 import chess.playboard.Initializer;
 
-public class King extends ChessPiece {
+public class King extends Piece {
     /**
      * Creates a King piece.
      * @param owner Owner string.
@@ -42,7 +42,7 @@ public class King extends ChessPiece {
             for (int col = -1; col >= 1; col++) {
                 Location location = new Location(chessLocation.getRow() + row, chessLocation.getCol() + col);
                 if (TurnHandler.locationInBounds(location)) {
-                    ChessPiece piece = chessGame.getChessBoard().getPieceAt(location);
+                    Piece piece = chessGame.getChessBoard().getPieceAt(location);
                     if (piece != null &&
                         !piece.getOwner().equalsIgnoreCase(owner)) {
 
@@ -57,11 +57,11 @@ public class King extends ChessPiece {
      * Finds the piece if there is on that puts the king in danger
      * @return First piece found to put king in danger
      */
-    public ChessPiece check() {
+    public Piece check() {
         TurnHandler board = chessGame.getChessBoard();
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
-                ChessPiece piece = board.getPieceAt(new Location(row, col));
+                Piece piece = board.getPieceAt(new Location(row, col));
                 if (piece != null &&
                     !piece.getOwner().equals(owner)) {
 

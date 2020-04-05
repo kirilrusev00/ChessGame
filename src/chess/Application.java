@@ -22,7 +22,7 @@ public class Application {
         String input;
 
         Location newLocation;
-        ChessPiece currentPiece;
+        Piece currentPiece;
         King king;
 
         while(!gameOver){
@@ -48,7 +48,7 @@ public class Application {
                     } else {
                         king = turnHandler.getPlayer2King();
                     }
-                    ChessPiece danger = king.check();
+                    Piece danger = king.check();
                     if (danger != null) {
                         System.out.println("Your King is in Check from piece at: (" + danger.getChessLocation().getRow() + ", " + danger.getChessLocation().getCol() + ").");
                     }
@@ -72,11 +72,11 @@ public class Application {
         }
     }
 
-    private static ChessPiece getCurrentPiece(Initializer chessGame, String currentPlayer) {
+    private static Piece getCurrentPiece(Initializer chessGame, String currentPlayer) {
         Scanner scanner = new Scanner(System.in);
         String input;
         Location currentLocation;
-        ChessPiece currentPiece;
+        Piece currentPiece;
 
         while (true) {
             System.out.println("Move from: row, col");

@@ -2,7 +2,7 @@ package chess.pieces;
 
 import chess.playboard.Initializer;
 
-public class Queen extends ChessPiece {
+public class Queen extends Piece {
     
     /**
      * Creates a new Queen piece.

@@ -2,7 +2,7 @@ package chess.pieces;
 
 import chess.playboard.Initializer;
 
-public class Rook extends ChessPiece {
+public class Rook extends Piece {
     
     /**
      * Creates a new Rook piece.

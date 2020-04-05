@@ -1,6 +1,6 @@
 package chess.playboard;
 
-import chess.pieces.ChessPiece;
+import chess.pieces.Piece;
 import chess.pieces.Location;
 
 /**
@@ -8,13 +8,13 @@ import chess.pieces.Location;
  * by moving and removing pieces.
  */
 public class TurnHandler {
-    private ChessPiece[][] board;
+    private Piece[][] board;
 
     /**
      * Creates the board instance.
      */
     public TurnHandler() {
-        board = new ChessPiece[8][8];
+        board = new Piece[8][8];
     }
 
     /**
@@ -32,7 +32,7 @@ public class TurnHandler {
      * @param piece The piece to move.
      * @param location The location to move to.
      */
-    public void placePieceAt(ChessPiece piece, Location location) {
+    public void placePieceAt(Piece piece, Location location) {
         if (isPieceAt(location.getRow(), location.getCol())) {
             removePieceAt(location);
         }
@@ -68,7 +68,7 @@ public class TurnHandler {
      * @param location Location to find piece at.
      * @return Piece at location/
      */
-    public ChessPiece getPieceAt(Location location) {
+    public Piece getPieceAt(Location location) {
         return board[location.getRow()][location.getCol()];
     }
 

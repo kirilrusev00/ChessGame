@@ -31,18 +31,18 @@ public class Initializer {
         int colIncerment = 0;
 
         // Rook
-        ChessPiece r1 = new Rook(player, new Location(side, colIncerment), this);
-        ChessPiece r2 = new Rook(player, new Location(side, 7-colIncerment), this);
+        Piece r1 = new Rook(player, new Location(side, colIncerment), this);
+        Piece r2 = new Rook(player, new Location(side, 7-colIncerment), this);
         colIncerment += 1;
 
         // Knight
-        ChessPiece n1 = new Knight(player, new Location(side, colIncerment), this);
-        ChessPiece n2 = new Knight(player, new Location(side, 7-colIncerment), this);
+        Piece n1 = new Knight(player, new Location(side, colIncerment), this);
+        Piece n2 = new Knight(player, new Location(side, 7-colIncerment), this);
         colIncerment += 1;
 
         // Bishop
-        ChessPiece b1 = new Bishop(player, new Location(side, colIncerment), this);
-        ChessPiece b2 = new Bishop(player, new Location(side, 7-colIncerment), this);
+        Piece b1 = new Bishop(player, new Location(side, colIncerment), this);
+        Piece b2 = new Bishop(player, new Location(side, 7-colIncerment), this);
         colIncerment += 1;
 
         // King & Queen
@@ -52,11 +52,11 @@ public class Initializer {
             player2King = new King(player, new Location(side, colIncerment), this);
         }
 
-        ChessPiece q = new Queen(player, new Location(side, 7-colIncerment), this);
+        Piece q = new Queen(player, new Location(side, 7-colIncerment), this);
 
         // Pawns
         for (int i = 0; i < 8; i++) {
-            ChessPiece p = new Pawn(player, new Location(side + one, i), this);
+            Piece p = new Pawn(player, new Location(side + one, i), this);
         }
     }
 

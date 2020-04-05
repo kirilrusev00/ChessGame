@@ -2,7 +2,7 @@ package chess.pieces;
 
 import chess.playboard.Initializer;
 
-public class Pawn extends ChessPiece {
+public class Pawn extends Piece {
 
     private boolean firstMove;
     private int one;

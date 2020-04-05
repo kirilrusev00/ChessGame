@@ -3,7 +3,7 @@ package chess.pieces;
 import chess.playboard.TurnHandler;
 import chess.playboard.Initializer;
 
-public class Knight extends ChessPiece {
+public class Knight extends Piece {
 
     /**
      * Sets the private members of the Knight. Such as it's owner
@@ -52,7 +52,7 @@ public class Knight extends ChessPiece {
         for (int i = 0; i < 8; i++) {
             Location location = new Location(rowMoves[i], colMoves[i]);
             if (TurnHandler.locationInBounds(location)) {
-                ChessPiece piece = chessGame.getChessBoard().getPieceAt(location);
+                Piece piece = chessGame.getChessBoard().getPieceAt(location);
                 
                 if (piece != null && 
                     !piece.getOwner().equals(owner)) {
