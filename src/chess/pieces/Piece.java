@@ -21,13 +21,13 @@ public abstract class Piece {
         location = null;
         this.game = game;
         threateningLocations = new ArrayList<>();
-        this.game.getChessBoard().placePieceAt(this, initialLocation);
+        this.game.getTurnHandler().placePieceAt(this, initialLocation);
     }
 
     private boolean isVerticalLineOfSightClear(Location start, Location end) {
         int one = (start.getRow() - end.getRow() < 0) ? 1 : -1;
         for (int row = start.getRow() + one; row < end.getRow(); row += one) {
-            if (game.getChessBoard().isPieceAt(row, start.getCol())) {
+            if (game.getTurnHandler().isPieceAt(row, start.getCol())) {
                 return false;
             }
         }
@@ -37,7 +37,7 @@ public abstract class Piece {
     private boolean isHorizontalLineOfSightClear(Location start, Location end) {
         int one = (start.getCol() - end.getCol() < 0) ? 1 : -1;
         for (int col = start.getCol() + one; col < end.getCol(); col += one) {
-            if (game.getChessBoard().isPieceAt(start.getRow(), col)) {
+            if (game.getTurnHandler().isPieceAt(start.getRow(), col)) {
                 return false;
             }
         }
@@ -47,7 +47,7 @@ public abstract class Piece {
     private boolean isBottomRightDiagonalLineOfSightClear(Location start, Location end) {
         int one = (start.getRow() - end.getRow() < 0) ? 1 : -1;
         for (int inc = one; Math.abs(inc) < Math.abs(start.getRow() - end.getRow()); inc += one) {
-            if (game.getChessBoard().isPieceAt(start.getRow() + inc, start.getCol() + inc)) {
+            if (game.getTurnHandler().isPieceAt(start.getRow() + inc, start.getCol() + inc)) {
                 return false;
             }
         }
@@ -58,7 +58,7 @@ public abstract class Piece {
         int one = (start.getRow() - end.getRow() < 0) ? 1 : -1;
         int negOne = one * -1;
         for (int inc = one; Math.abs(inc) < Math.abs(start.getRow() - end.getRow()); inc += one) {
-            if (game.getChessBoard().isPieceAt(start.getRow() + inc, start.getCol() + (inc * negOne))) {
+            if (game.getTurnHandler().isPieceAt(start.getRow() + inc, start.getCol() + (inc * negOne))) {
                 return false;
             }
         }
@@ -101,8 +101,8 @@ public abstract class Piece {
 
     protected void updateThreateningLocationsByVertical(int direction) {
         Location location = new Location(this.location.getRow() + direction, this.location.getCol());
-        while (TurnHandler.locationInBounds(location)) {
-            Piece piece = game.getChessBoard().getPieceAt(location);
+        while (TurnHandler.isLocationInBounds(location)) {
+            Piece piece = game.getTurnHandler().getPieceAt(location);
             if (piece != null) {
                 if (!piece.getOwner().equalsIgnoreCase(owner)) {
                     threateningLocations.add(location);
@@ -119,8 +119,8 @@ public abstract class Piece {
 
     protected void updateThreateningLocationsByHorizontal(int direction) {
         Location location = new Location(this.location.getRow(), this.location.getCol() + direction);
-        while (TurnHandler.locationInBounds(location)) {
-            Piece piece = game.getChessBoard().getPieceAt(location);
+        while (TurnHandler.isLocationInBounds(location)) {
+            Piece piece = game.getTurnHandler().getPieceAt(location);
             if (piece != null) {
                 if (!piece.getOwner().equalsIgnoreCase(owner)) {
                     threateningLocations.add(location);
@@ -138,8 +138,8 @@ public abstract class Piece {
     protected void updateThreateningLocationsByDiagonal(int rowDirection, int colDirection) {
         Location location = new Location(this.location.getRow() + rowDirection,
                 this.location.getCol() + colDirection);
-        while (TurnHandler.locationInBounds(location)) {
-            Piece piece = game.getChessBoard().getPieceAt(location);
+        while (TurnHandler.isLocationInBounds(location)) {
+            Piece piece = game.getTurnHandler().getPieceAt(location);
             if (piece != null) {
                 if (!piece.getOwner().equalsIgnoreCase(owner)) {
                     threateningLocations.add(location);
@@ -156,7 +156,7 @@ public abstract class Piece {
     }
 
     public boolean moveToIfPossible(Location newLocation) {
-        TurnHandler board = game.getChessBoard();
+        TurnHandler board = game.getTurnHandler();
         Piece oldPiece = board.getPieceAt(newLocation);
 
         if (oldPiece == null || !owner.equals(oldPiece.getOwner())) {

@@ -3,7 +3,7 @@ package chess.pieces;
 import chess.playboard.Game;
 
 public class Queen extends Piece {
-    
+
     public Queen(String owner, Location initialLocation, Game game) {
         super(owner, initialLocation, game);
         if (owner.equalsIgnoreCase("player1")) {

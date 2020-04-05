@@ -24,7 +24,7 @@ public class Pawn extends Piece {
         if (firstMove) {
             firstMove = false;
         }
-        return !game.getChessBoard().isPieceAt(location.getRow(), location.getCol())
+        return !game.getTurnHandler().isPieceAt(location.getRow(), location.getCol())
                 && super.moveToIfPossible(location);
     }
 
@@ -32,7 +32,7 @@ public class Pawn extends Piece {
         if (firstMove) {
             firstMove = false;
         }
-        return !game.getChessBoard().isPieceAt(location.getRow(), location.getCol())
+        return !game.getTurnHandler().isPieceAt(location.getRow(), location.getCol())
                 && super.moveToIfPossible(location);
     }
 
@@ -45,7 +45,7 @@ public class Pawn extends Piece {
                 return moveForwardWithTwoPositionsIfPossible();
             }
         } else if (Math.abs(location.getCol() - this.location.getCol()) == 1) {
-            if (game.getChessBoard().isPieceAt(location.getRow(), location.getCol()) &&
+            if (game.getTurnHandler().isPieceAt(location.getRow(), location.getCol()) &&
                     location.getRow() - this.location.getRow() == direction) {
 
                 if (firstMove) {

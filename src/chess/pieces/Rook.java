@@ -3,7 +3,7 @@ package chess.pieces;
 import chess.playboard.Game;
 
 public class Rook extends Piece {
-    
+
     public Rook(String owner, Location initialLocation, Game game) {
         super(owner, initialLocation, game);
         if (owner.equalsIgnoreCase("player1")) {
@@ -16,7 +16,7 @@ public class Rook extends Piece {
     @Override
     public boolean moveToIfPossible(Location location) {
         if ((this.location.getRow() == location.getRow()) !=
-            (this.location.getCol() == location.getCol())) {
+                (this.location.getCol() == location.getCol())) {
 
             return checkLineOfSightBetweenTwoLocations(this.location, location) && super.moveToIfPossible(location);
         }

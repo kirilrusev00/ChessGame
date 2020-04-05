@@ -17,7 +17,7 @@ public class King extends Piece {
     @Override
     public boolean moveToIfPossible(Location location) {
         if (Math.abs(this.location.getRow() - location.getRow()) <= 1 &&
-            Math.abs(this.location.getCol() - location.getCol()) <= 1) {
+                Math.abs(this.location.getCol() - location.getCol()) <= 1) {
 
             return checkLineOfSightBetweenTwoLocations(this.location, location) && super.moveToIfPossible(location);
         }
@@ -31,10 +31,10 @@ public class King extends Piece {
             for (int col = -1; col <= 1; col++) {
                 Location location = new Location(this.location.getRow() + row,
                         this.location.getCol() + col);
-                if (TurnHandler.locationInBounds(location)) {
-                    Piece piece = game.getChessBoard().getPieceAt(location);
+                if (location.isInBoardBounds()) {
+                    Piece piece = game.getTurnHandler().getPieceAt(location);
                     if (piece != null &&
-                        !piece.getOwner().equalsIgnoreCase(owner)) {
+                            !piece.getOwner().equalsIgnoreCase(owner)) {
 
                         threateningLocations.add(location);
                     }
@@ -44,15 +44,15 @@ public class King extends Piece {
     }
 
     public Piece getPieceThreateningKing() {
-        TurnHandler board = game.getChessBoard();
+        TurnHandler board = game.getTurnHandler();
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 Piece piece = board.getPieceAt(new Location(row, col));
                 if (piece != null &&
-                    !piece.getOwner().equals(owner)) {
+                        !piece.getOwner().equals(owner)) {
 
                     piece.updateThreateningLocation();
-                    for (Location l: piece.getThreateningLocations()) {
+                    for (Location l : piece.getThreateningLocations()) {
                         if (location.equals(l)) {
                             return piece;
                         }

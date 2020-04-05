@@ -17,33 +17,30 @@ public class Knight extends Piece {
     @Override
     public boolean moveToIfPossible(Location location) {
         if (Math.abs(this.location.getRow() - location.getRow()) == 2 &&
-            Math.abs(this.location.getCol() - location.getCol()) == 1) {
+                Math.abs(this.location.getCol() - location.getCol()) == 1) {
 
             return super.moveToIfPossible(location);
         } else if (Math.abs(this.location.getRow() - location.getRow()) == 1 &&
-                   Math.abs(this.location.getCol() - location.getCol()) == 2) {
+                Math.abs(this.location.getCol() - location.getCol()) == 2) {
 
             return super.moveToIfPossible(location);
         }
         return false;
     }
 
-    /**
-     * Updates the threatening locations.
-     */
     @Override
     protected void updateThreateningLocation() {
-        final int[] rowMoves = { -2, -1, 1, 2, -2, -1, 1, 2 };
-        final int[] colMoves = { 1, 2, 2, 1, -1, -2, -2, -1 };
+        final int[] rowMoves = {-2, -1, 1, 2, -2, -1, 1, 2};
+        final int[] colMoves = {1, 2, 2, 1, -1, -2, -2, -1};
 
         threateningLocations.clear();
         for (int i = 0; i < BOARD_SIZE; i++) {
             Location location = new Location(rowMoves[i], colMoves[i]);
-            if (TurnHandler.locationInBounds(location)) {
-                Piece piece = game.getChessBoard().getPieceAt(location);
-                
-                if (piece != null && 
-                    !piece.getOwner().equals(owner)) {
+            if (TurnHandler.isLocationInBounds(location)) {
+                Piece piece = game.getTurnHandler().getPieceAt(location);
+
+                if (piece != null &&
+                        !piece.getOwner().equals(owner)) {
 
                     threateningLocations.add(location);
                 }

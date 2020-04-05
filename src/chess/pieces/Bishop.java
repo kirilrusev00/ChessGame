@@ -3,7 +3,7 @@ package chess.pieces;
 import chess.playboard.Game;
 
 public class Bishop extends Piece {
-    
+
     public Bishop(String owner, Location location, Game game) {
         super(owner, location, game);
         if (owner.equalsIgnoreCase("player1")) {
@@ -16,8 +16,8 @@ public class Bishop extends Piece {
     @Override
     public boolean moveToIfPossible(Location location) {
         if (Math.abs(this.location.getRow() - location.getRow()) ==
-            Math.abs(this.location.getCol() - location.getCol())) {
-            
+                Math.abs(this.location.getCol() - location.getCol())) {
+
             return checkLineOfSightBetweenTwoLocations(this.location, location) && super.moveToIfPossible(location);
         }
         return false;

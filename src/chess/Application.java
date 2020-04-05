@@ -27,7 +27,7 @@ public class Application {
 
         while(!gameOver){
             try {
-                System.out.println(turnHandler.getChessBoard().toString());
+                System.out.println(turnHandler.getTurnHandler().toString());
                 System.out.println(currentPlayer + "'s Turn:");
                 System.out.println("M - Move a piece");
                 System.out.println("Q - Quit game");
@@ -44,9 +44,9 @@ public class Application {
                 } else if (input.equalsIgnoreCase("M") || input.equalsIgnoreCase("MOVE")) {
                     
                     if (currentPlayer.equals("player1")) {
-                        king = turnHandler.getPlayer1King();
+                        king = turnHandler.getKingOfPlayer1();
                     } else {
-                        king = turnHandler.getPlayer2King();
+                        king = turnHandler.getKingOfPlayer2();
                     }
                     Piece danger = king.check();
                     if (danger != null) {
@@ -82,11 +82,11 @@ public class Application {
             System.out.println("Move from: row, col");
             input = scanner.nextLine();
             currentLocation = createChessLocation(input);
-            if (!TurnHandler.locationInBounds(currentLocation)) {
+            if (!TurnHandler.isLocationInBounds(currentLocation)) {
                 System.out.println("Location not on board, try again.");
                 continue;
             }
-            currentPiece = chessGame.getChessBoard().getPieceAt(currentLocation);
+            currentPiece = chessGame.getTurnHandler().getPieceAt(currentLocation);
             if (currentPiece == null) {
                 System.out.println("Invalid piece selected, out of bounds.");
             } else if (currentPiece.getOwner().equalsIgnoreCase(currentPlayer)) {
@@ -107,7 +107,7 @@ public class Application {
             System.out.println("Move to: row, col");
             input = scanner.nextLine();
             newLocation = createChessLocation(input);
-            if (!TurnHandler.locationInBounds(newLocation)) {
+            if (!TurnHandler.isLocationInBounds(newLocation)) {
                System.out.println("Invalid location selected, out of bounds.");
             } else {
                 return newLocation;
