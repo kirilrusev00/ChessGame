@@ -1,7 +1,7 @@
 package chess.pieces;
 
 import chess.playboard.TurnHandler;
-import chess.playboard.Initializer;
+import chess.playboard.Game;
 
 public class King extends Piece {
     /**
@@ -10,12 +10,12 @@ public class King extends Piece {
      * @param initialLocation Location to set King in.
      * @param game Game that the King belongs too.
      */
-    public King(String owner, Location initialLocation, Initializer game) {
+    public King(String owner, Location initialLocation, Game game) {
         super(owner, initialLocation, game);
         if (owner.equalsIgnoreCase("player1")) {
-            id = 'K';
+            type = 'K';
         } else if (owner.equalsIgnoreCase("player2")) {
-            id = 'k';
+            type = 'k';
         }
     }
 
@@ -24,10 +24,10 @@ public class King extends Piece {
      */
     @Override
     public boolean moveTo(Location location) {
-        if (Math.abs(chessLocation.getRow() - location.getRow()) <= 1 && 
-            Math.abs(chessLocation.getCol() - location.getCol()) <= 1) {
+        if (Math.abs(this.location.getRow() - location.getRow()) <= 1 &&
+            Math.abs(this.location.getCol() - location.getCol()) <= 1) {
 
-            return checkLineOfSight(chessLocation, location) && super.moveTo(location);
+            return checkLineOfSightBetweenTwoLocations(this.location, location) && super.moveTo(location);
         }
         return false;
     }
@@ -40,9 +40,9 @@ public class King extends Piece {
         threateningLocations.clear();
         for (int row = -1; row >= 1; row++) {
             for (int col = -1; col >= 1; col++) {
-                Location location = new Location(chessLocation.getRow() + row, chessLocation.getCol() + col);
+                Location location = new Location(this.location.getRow() + row, this.location.getCol() + col);
                 if (TurnHandler.locationInBounds(location)) {
-                    Piece piece = chessGame.getChessBoard().getPieceAt(location);
+                    Piece piece = game.getChessBoard().getPieceAt(location);
                     if (piece != null &&
                         !piece.getOwner().equalsIgnoreCase(owner)) {
 
@@ -58,7 +58,7 @@ public class King extends Piece {
      * @return First piece found to put king in danger
      */
     public Piece check() {
-        TurnHandler board = chessGame.getChessBoard();
+        TurnHandler board = game.getChessBoard();
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
                 Piece piece = board.getPieceAt(new Location(row, col));
@@ -67,7 +67,7 @@ public class King extends Piece {
 
                     piece.updateThreateningLocation();
                     for (Location l: piece.getThreateningLocations()) {
-                        if (chessLocation.equals(l)) {
+                        if (location.equals(l)) {
                             return piece;
                         }
                     }

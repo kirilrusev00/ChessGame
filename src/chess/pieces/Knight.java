@@ -1,7 +1,7 @@
 package chess.pieces;
 
 import chess.playboard.TurnHandler;
-import chess.playboard.Initializer;
+import chess.playboard.Game;
 
 public class Knight extends Piece {
 
@@ -12,12 +12,12 @@ public class Knight extends Piece {
      * @param initialLocation Location to set knight in.
      * @param game Game that the knight belongs too.
      */
-    public Knight(String owner, Location initialLocation, Initializer game) {
+    public Knight(String owner, Location initialLocation, Game game) {
         super(owner, initialLocation, game);
         if (owner.equalsIgnoreCase("player1")) {
-            id = 'N';
+            type = 'N';
         } else if (owner.equalsIgnoreCase("player2")) {
-            id = 'n';
+            type = 'n';
         }
     }
 
@@ -28,12 +28,12 @@ public class Knight extends Piece {
      */
     @Override
     public boolean moveTo(Location location) {
-        if (Math.abs(chessLocation.getRow() - location.getRow()) == 2 && 
-            Math.abs(chessLocation.getCol() - location.getCol()) == 1) {
+        if (Math.abs(this.location.getRow() - location.getRow()) == 2 &&
+            Math.abs(this.location.getCol() - location.getCol()) == 1) {
 
             return super.moveTo(location); 
-        } else if (Math.abs(chessLocation.getRow() - location.getRow()) == 1 && 
-                   Math.abs(chessLocation.getCol() - location.getCol()) == 2) {
+        } else if (Math.abs(this.location.getRow() - location.getRow()) == 1 &&
+                   Math.abs(this.location.getCol() - location.getCol()) == 2) {
 
             return super.moveTo(location); 
         }
@@ -52,7 +52,7 @@ public class Knight extends Piece {
         for (int i = 0; i < 8; i++) {
             Location location = new Location(rowMoves[i], colMoves[i]);
             if (TurnHandler.locationInBounds(location)) {
-                Piece piece = chessGame.getChessBoard().getPieceAt(location);
+                Piece piece = game.getChessBoard().getPieceAt(location);
                 
                 if (piece != null && 
                     !piece.getOwner().equals(owner)) {

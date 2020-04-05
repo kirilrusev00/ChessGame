@@ -1,6 +1,6 @@
 package chess.pieces;
 
-import chess.playboard.Initializer;
+import chess.playboard.Game;
 
 public class Bishop extends Piece {
     
@@ -9,12 +9,12 @@ public class Bishop extends Piece {
      * @param initialLocation Location to set Bishop in.
      * @param game Game that the Bishop belongs too.
      */
-    public Bishop(String owner, Location initialLocation, Initializer game) {
+    public Bishop(String owner, Location initialLocation, Game game) {
         super(owner, initialLocation, game);
         if (owner.equalsIgnoreCase("player1")) {
-            id = 'B';
+            type = 'B';
         } else if (owner.equalsIgnoreCase("player2")) {
-            id = 'b';
+            type = 'b';
         }
     }
 
@@ -23,10 +23,10 @@ public class Bishop extends Piece {
      */
     @Override
     public boolean moveTo(Location location) {
-        if (Math.abs(chessLocation.getRow() - location.getRow()) == 
-            Math.abs(chessLocation.getCol() - location.getCol())) {
+        if (Math.abs(this.location.getRow() - location.getRow()) ==
+            Math.abs(this.location.getCol() - location.getCol())) {
             
-            return checkLineOfSight(chessLocation, location) && super.moveTo(location);
+            return checkLineOfSightBetweenTwoLocations(this.location, location) && super.moveTo(location);
         }
         return false;
     }
@@ -37,9 +37,9 @@ public class Bishop extends Piece {
     @Override
     protected void updateThreateningLocation() {
         threateningLocations.clear();
-        super.updateDiagonal(1, 1);
-        super.updateDiagonal(-1, 1);
-        super.updateDiagonal(1, -1);
-        super.updateDiagonal(-1, -1);
+        super.updateThreateningLocationsByDiagonal(1, 1);
+        super.updateThreateningLocationsByDiagonal(-1, 1);
+        super.updateThreateningLocationsByDiagonal(1, -1);
+        super.updateThreateningLocationsByDiagonal(-1, -1);
     }
 }

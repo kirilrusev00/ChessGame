@@ -1,217 +1,187 @@
 package chess.pieces;
 
 import chess.playboard.TurnHandler;
-import chess.playboard.Initializer;
+import chess.playboard.Game;
 
 import java.util.ArrayList;
 
-/**
- * ChessPiece is a general piece class for chess.
- */
 public abstract class Piece {
 
-    protected Initializer chessGame;
+    protected Game game;
     protected String owner;
-    protected Location chessLocation;
-    protected char id;
+    protected Location location;
+    protected char type;
     protected ArrayList<Location> threateningLocations;
 
     protected abstract void updateThreateningLocation();
 
-    /**
-     * Sets the private members of the ChessPiece. Such as it's owner
-     * the lcoation and the game it belongs to.
-     * @param owner Owner string.
-     * @param initialLocation Location to set knight in.
-     * @param game Game that the knight belongs too.
-     */
-    public Piece(String owner, Location initialLocation, Initializer game) {
+    public Piece(String owner, Location initialLocation, Game game) {
         this.owner = owner;
-        chessLocation = null; 
-        chessGame = game;
+        location = null;
+        this.game = game;
         threateningLocations = new ArrayList<>();
-        chessGame.getChessBoard().placePieceAt(this, initialLocation);
+        this.game.getChessBoard().placePieceAt(this, initialLocation);
     }
 
-    /**
-     * Checks for the line of sight of the move.
-     * @param start Start location.
-     * @param end End location.
-     * @return Valid move or not
-     */
-    protected boolean checkLineOfSight(Location start, Location end) {
-        // Vertical
-        if (start.getCol() == end.getCol()) { 
-            int one = (start.getRow() - end.getRow() < 0) ? 1: -1;
-            for (int row = start.getRow() + one; row < end.getRow(); row += one) {
-                if (chessGame.getChessBoard().isPieceAt(row, start.getCol())) {
-                    return false;
-                }
+    private boolean isVerticalLineOfSightClear(Location start, Location end) {
+        int one = (start.getRow() - end.getRow() < 0) ? 1 : -1;
+        for (int row = start.getRow() + one; row < end.getRow(); row += one) {
+            if (game.getChessBoard().isPieceAt(row, start.getCol())) {
+                return false;
             }
-            return true;
+        }
+        return true;
+    }
+
+    private boolean isHorizontalLineOfSightClear(Location start, Location end) {
+        int one = (start.getCol() - end.getCol() < 0) ? 1 : -1;
+        for (int col = start.getCol() + one; col < end.getCol(); col += one) {
+            if (game.getChessBoard().isPieceAt(start.getRow(), col)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isBottomRightDiagonalLineOfSightClear(Location start, Location end) {
+        int one = (start.getRow() - end.getRow() < 0) ? 1 : -1;
+        for (int inc = one; Math.abs(inc) < Math.abs(start.getRow() - end.getRow()); inc += one) {
+            if (game.getChessBoard().isPieceAt(start.getRow() + inc, start.getCol() + inc)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isUpRightDiagonalLineOfSightClear(Location start, Location end) {
+        int one = (start.getRow() - end.getRow() < 0) ? 1 : -1;
+        int negOne = one * -1;
+        for (int inc = one; Math.abs(inc) < Math.abs(start.getRow() - end.getRow()); inc += one) {
+            if (game.getChessBoard().isPieceAt(start.getRow() + inc, start.getCol() + (inc * negOne))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean areLocationsOnVertical(Location start, Location end) {
+        return (start.getCol() == end.getCol());
+    }
+
+    private boolean areLocationsOnHorizontal(Location start, Location end) {
+        return (start.getRow() == end.getRow());
+    }
+
+    private boolean areLocationsOnBottomRightDiagonal(Location start, Location end) {
+        return (start.getCol() - end.getCol() == start.getRow() - end.getRow());
+    }
+
+    private boolean areLocationsOnUpRightDiagonal(Location start, Location end) {
+        return (start.getCol() - end.getCol() * -1 == start.getRow() - end.getCol());
+    }
+
+    protected boolean checkLineOfSightBetweenTwoLocations(Location start, Location end) {
+        if (areLocationsOnVertical(start, end)) {
+            return isVerticalLineOfSightClear(start, end);
         }
 
-        // Horizontal
-        if (start.getRow() == end.getRow()) {
-            int one = (start.getCol() - end.getCol() < 0) ? 1: -1;
-            for (int col = start.getCol() + one; col < end.getCol(); col += one) {
-                if (chessGame.getChessBoard().isPieceAt(start.getRow(), col)) {
-                    return false;
-                }
-            }
-            return true;
+        if (areLocationsOnHorizontal(start, end)) {
+            return isHorizontalLineOfSightClear(start, end);
         }
 
-        // Diagonal
-        // Case 1 : Slope -1
-        // Case 2 : Slope 1
-        if (start.getCol() - end.getCol() == 
-            start.getRow() - end.getRow()) {
+        if (areLocationsOnBottomRightDiagonal(start, end)) {
+            return isBottomRightDiagonalLineOfSightClear(start, end);
 
-            int one = (start.getRow() - end.getRow() < 0) ? 1: -1;
-            for (int inc = one; Math.abs(inc) < Math.abs(start.getRow() - end.getRow()); inc += one) {
-                if (chessGame.getChessBoard().isPieceAt(start.getRow() + inc, start.getCol() + inc)) {
-                    return false;
-                }
-            }
-            return true;
-        } else if (start.getCol() - end.getCol() * -1 == 
-                   start.getRow() - end.getCol()) {
-
-            int one = (start.getRow() - end.getRow() < 0) ? 1: -1;
-            int negOne = one * -1;
-            for (int inc = one; Math.abs(inc) < Math.abs(start.getRow() - end.getRow()); inc += one) {
-                if (chessGame.getChessBoard().isPieceAt(start.getRow() + inc, start.getCol() + (inc * negOne))) {
-                    return false;
-                }
-            }
-            return true;
+        } else if (areLocationsOnUpRightDiagonal(start, end)) {
+            return isUpRightDiagonalLineOfSightClear(start, end);
         }
         return false;
     }
 
-    /**
-     * Updates the threathening locations for a vertical direction.
-     * @param one The direction to check in
-     */
-    protected void updateVertical(int one) {
-        Location location = new Location(chessLocation.getRow() + one, chessLocation.getCol());
-        int inc = one;
+    protected void updateThreateningLocationsByVertical(int direction) {
+        Location location = new Location(this.location.getRow() + direction, this.location.getCol());
         while (TurnHandler.locationInBounds(location)) {
-            Piece piece = chessGame.getChessBoard().getPieceAt(location);
+            Piece piece = game.getChessBoard().getPieceAt(location);
             if (piece != null) {
                 if (!piece.getOwner().equalsIgnoreCase(owner)) {
-                    threateningLocations.add(location); 
+                    threateningLocations.add(location);
                     return;
-                } else if (!chessLocation.equals(location)) {
-                    threateningLocations.add(new Location(location.getRow() - one, location.getCol()));
+                } else if (!this.location.equals(location)) {
+                    threateningLocations.add(new Location(location.getRow() - direction, location.getCol()));
                     return;
                 }
             } else {
-                location = new Location(location.getRow() + one, location.getCol());
+                location = new Location(location.getRow() + direction, location.getCol());
             }
         }
     }
 
-    /**
-     * Updates the threathening locations for a horizonal direction.
-     * @param one The direction to check in
-     */
-    protected void updateHorizontal(int one) {
-        Location location = new Location(chessLocation.getRow(), chessLocation.getCol() + one);
+    protected void updateThreateningLocationsByHorizontal(int direction) {
+        Location location = new Location(this.location.getRow(), this.location.getCol() + direction);
         while (TurnHandler.locationInBounds(location)) {
-            Piece piece = chessGame.getChessBoard().getPieceAt(location);
+            Piece piece = game.getChessBoard().getPieceAt(location);
             if (piece != null) {
                 if (!piece.getOwner().equalsIgnoreCase(owner)) {
-                    threateningLocations.add(location); 
+                    threateningLocations.add(location);
                     return;
-                } else if (!chessLocation.equals(location)) {
-                    threateningLocations.add(new Location(location.getRow(), location.getCol() - one));
+                } else if (!this.location.equals(location)) {
+                    threateningLocations.add(new Location(location.getRow(), location.getCol() - direction));
                     return;
                 }
             } else {
-                location = new Location(location.getRow(), location.getCol() + one);
+                location = new Location(location.getRow(), location.getCol() + direction);
             }
         }
     }
 
-    /**
-     * Updates the threathening locations for a diagonal direction.
-     * @param rowOne The row direction to check in
-     * @param colOne The col direction to check in
-     */
-    protected void updateDiagonal(int rowOne, int colOne) {
-        Location location = new Location(chessLocation.getRow() + rowOne, chessLocation.getCol() + colOne);
+    protected void updateThreateningLocationsByDiagonal(int rowDirection, int colDirection) {
+        Location location = new Location(this.location.getRow() + rowDirection,
+                this.location.getCol() + colDirection);
         while (TurnHandler.locationInBounds(location)) {
-            Piece piece = chessGame.getChessBoard().getPieceAt(location);
+            Piece piece = game.getChessBoard().getPieceAt(location);
             if (piece != null) {
                 if (!piece.getOwner().equalsIgnoreCase(owner)) {
-                    threateningLocations.add(location); 
+                    threateningLocations.add(location);
                     return;
-                } else if (!chessLocation.equals(location)) {
-                    threateningLocations.add(new Location(location.getRow() - rowOne, location.getCol() - colOne));
+                } else if (!this.location.equals(location)) {
+                    threateningLocations.add(new Location(location.getRow() - rowDirection,
+                            location.getCol() - colDirection));
                     return;
                 }
             } else {
-                location = new Location(location.getRow() + rowOne, location.getCol() + colOne);
+                location = new Location(location.getRow() + rowDirection, location.getCol() + colDirection);
             }
         }
     }
 
-    /**
-     * Sets the location of the ChessPiece.
-     * @param newLocation The new location of the knight.
-     */
     public boolean moveTo(Location newLocation) {
-        TurnHandler board = chessGame.getChessBoard();
+        TurnHandler board = game.getChessBoard();
         Piece oldPiece = board.getPieceAt(newLocation);
-        
-        if (oldPiece == null ||
-            oldPiece.getOwner() != owner) {
-            
+
+        if (oldPiece == null || !owner.equals(oldPiece.getOwner())) {
             board.placePieceAt(this, newLocation);
             return true;
         }
         return false;
     }
 
-    /**
-     * Returns the location of piece.
-     * @return ChessLocation of the ChessPiece.
-     */
-    public Location getChessLocation() {
-        return chessLocation;
+    public Location getLocation() {
+        return location;
     }
 
-    /**
-     * Sets the location of the piece.
-     * @param location new location.
-     */
-    public void setChessLocation(Location location) {
-        chessLocation = location;
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
-    /**
-     * Gets the owner String
-     * @return Owner string
-     */
     public String getOwner() {
         return owner;
     }
 
-    /**
-     * Gets the id of the piece.
-     * @return Char of the id.
-     */
-    public char getId() {
-        return id;
+    public char getType() {
+        return type;
     }
 
-    /**
-     * Gets threateningLocation
-     * @return ArrayList of ChessLocations
-     */
-    public ArrayList<Location> getThreateningLocations() {
+    ArrayList<Location> getThreateningLocations() {
         return threateningLocations;
     }
 }

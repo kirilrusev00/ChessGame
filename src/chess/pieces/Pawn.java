@@ -1,6 +1,6 @@
 package chess.pieces;
 
-import chess.playboard.Initializer;
+import chess.playboard.Game;
 
 public class Pawn extends Piece {
 
@@ -13,13 +13,13 @@ public class Pawn extends Piece {
      * @param initialLocation Location to set Pawn in.
      * @param game Game that the Pawn belongs too.
      */
-    public Pawn(String owner, Location initialLocation, Initializer game) {
+    public Pawn(String owner, Location initialLocation, Game game) {
         super(owner, initialLocation, game);
         if (owner.equalsIgnoreCase("player1")) {
-            id = 'P';
+            type = 'P';
             one = 1;
         } else if (owner.equalsIgnoreCase("player2")) {
-            id = 'p';
+            type = 'p';
             one = -1;
         }
         firstMove = true;
@@ -30,21 +30,21 @@ public class Pawn extends Piece {
      */
     @Override
     public boolean moveTo(Location location) {
-        if (location.getCol() == chessLocation.getCol()) {
-            if (location.getRow() - chessLocation.getRow() == one) {
+        if (location.getCol() == this.location.getCol()) {
+            if (location.getRow() - this.location.getRow() == one) {
                 if (firstMove) {
                     firstMove = false;
                 }
-                return !chessGame.getChessBoard().isPieceAt(location.getRow(), location.getCol()) && super.moveTo(location);
-            } else if (firstMove && (location.getRow() - chessLocation.getRow() == (one * 2))) {
+                return !game.getChessBoard().isPieceAt(location.getRow(), location.getCol()) && super.moveTo(location);
+            } else if (firstMove && (location.getRow() - this.location.getRow() == (one * 2))) {
                 if (firstMove) {
                     firstMove = false;
                 }
-                return !chessGame.getChessBoard().isPieceAt(location.getRow(), location.getCol()) && super.moveTo(location);
+                return !game.getChessBoard().isPieceAt(location.getRow(), location.getCol()) && super.moveTo(location);
             }
-        } else if (Math.abs(location.getCol() - chessLocation.getCol()) == 1) {
-            if (chessGame.getChessBoard().isPieceAt(location.getRow(), location.getCol()) &&
-                location.getRow() - chessLocation.getRow() == one) {
+        } else if (Math.abs(location.getCol() - this.location.getCol()) == 1) {
+            if (game.getChessBoard().isPieceAt(location.getRow(), location.getCol()) &&
+                location.getRow() - this.location.getRow() == one) {
 
                 if (firstMove) {
                     firstMove = false;
@@ -62,20 +62,20 @@ public class Pawn extends Piece {
     protected void updateThreateningLocation() {
         int one = 0;
         if (owner.equalsIgnoreCase("player1") &&
-            chessLocation.getRow() <= 6) {
+            location.getRow() <= 6) {
             one = 1;
         } else if (owner.equalsIgnoreCase("player2") &&
-                    chessLocation.getRow() >= 1) {
+                    location.getRow() >= 1) {
             one = -1;
         }
 
         threateningLocations.clear();
 
-        if (chessLocation.getCol() >= 1) {
-            threateningLocations.add(new Location(chessLocation.getRow() + one, chessLocation.getCol() - 1));
+        if (location.getCol() >= 1) {
+            threateningLocations.add(new Location(location.getRow() + one, location.getCol() - 1));
         }
-        if (chessLocation.getCol() <= 6) {
-            threateningLocations.add(new Location(chessLocation.getRow() + one, chessLocation.getCol() + 1));
+        if (location.getCol() <= 6) {
+            threateningLocations.add(new Location(location.getRow() + one, location.getCol() + 1));
         }
     }
 }

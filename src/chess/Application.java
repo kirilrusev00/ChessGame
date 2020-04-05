@@ -15,7 +15,7 @@ public class Application {
      * @param args Command line args.
      */
     public static void main(String[] args) {
-        Initializer turnHandler = new Initializer();
+        Game turnHandler = new Game();
         boolean gameOver = false;
         String currentPlayer = "player1";
         Scanner scanner = new Scanner(System.in);
@@ -38,7 +38,7 @@ public class Application {
                     System.out.println("===== GAME HAS ENDED =====");
                     continue;
                 } else if (input.equalsIgnoreCase("R") || input.equalsIgnoreCase("RESTART")) {
-                    turnHandler = new Initializer();
+                    turnHandler = new Game();
                     System.out.println("===== GAME RESTARTED =====");
                     continue;
                 } else if (input.equalsIgnoreCase("M") || input.equalsIgnoreCase("MOVE")) {
@@ -50,7 +50,7 @@ public class Application {
                     }
                     Piece danger = king.check();
                     if (danger != null) {
-                        System.out.println("Your King is in Check from piece at: (" + danger.getChessLocation().getRow() + ", " + danger.getChessLocation().getCol() + ").");
+                        System.out.println("Your King is in Check from piece at: (" + danger.getLocation().getRow() + ", " + danger.getLocation().getCol() + ").");
                     }
 
                     currentPiece = getCurrentPiece(turnHandler, currentPlayer);
@@ -72,7 +72,7 @@ public class Application {
         }
     }
 
-    private static Piece getCurrentPiece(Initializer chessGame, String currentPlayer) {
+    private static Piece getCurrentPiece(Game chessGame, String currentPlayer) {
         Scanner scanner = new Scanner(System.in);
         String input;
         Location currentLocation;

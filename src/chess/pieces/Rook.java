@@ -1,6 +1,6 @@
 package chess.pieces;
 
-import chess.playboard.Initializer;
+import chess.playboard.Game;
 
 public class Rook extends Piece {
     
@@ -10,12 +10,12 @@ public class Rook extends Piece {
      * @param initialLocation Location to set Rook in.
      * @param game Game that the Rook belongs too.
      */
-    public Rook(String owner, Location initialLocation, Initializer game) {
+    public Rook(String owner, Location initialLocation, Game game) {
         super(owner, initialLocation, game);
         if (owner.equalsIgnoreCase("player1")) {
-            id = 'R';
+            type = 'R';
         } else if (owner.equalsIgnoreCase("player2")) {
-            id = 'r';
+            type = 'r';
         }
     }
 
@@ -24,10 +24,10 @@ public class Rook extends Piece {
      */
     @Override
     public boolean moveTo(Location location) {
-        if ((chessLocation.getRow() == location.getRow()) !=
-            (chessLocation.getCol() == location.getCol())) {
+        if ((this.location.getRow() == location.getRow()) !=
+            (this.location.getCol() == location.getCol())) {
 
-            return checkLineOfSight(chessLocation, location) && super.moveTo(location);
+            return checkLineOfSightBetweenTwoLocations(this.location, location) && super.moveTo(location);
         }
         return false;
     }
@@ -39,9 +39,9 @@ public class Rook extends Piece {
     protected void updateThreateningLocation() {
         threateningLocations.clear();
 
-        super.updateVertical(1);
-        super.updateVertical(-1);
-        super.updateHorizontal(1);
-        super.updateHorizontal(-1);
+        super.updateThreateningLocationsByVertical(1);
+        super.updateThreateningLocationsByVertical(-1);
+        super.updateThreateningLocationsByHorizontal(1);
+        super.updateThreateningLocationsByHorizontal(-1);
     }
 }

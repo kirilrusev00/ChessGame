@@ -1,6 +1,6 @@
 package chess.pieces;
 
-import chess.playboard.Initializer;
+import chess.playboard.Game;
 
 public class Queen extends Piece {
     
@@ -10,12 +10,12 @@ public class Queen extends Piece {
      * @param initialLocation Location to set Queen in.
      * @param game Game that the Queen belongs too.
      */
-    public Queen(String owner, Location initialLocation, Initializer game) {
+    public Queen(String owner, Location initialLocation, Game game) {
         super(owner, initialLocation, game);
         if (owner.equalsIgnoreCase("player1")) {
-            id = 'Q';
+            type = 'Q';
         } else if (owner.equalsIgnoreCase("player2")) {
-            id = 'q';
+            type = 'q';
         }
     }
 
@@ -24,7 +24,7 @@ public class Queen extends Piece {
      */
     @Override
     public boolean moveTo(Location location) {
-        return checkLineOfSight(chessLocation, location) && super.moveTo(location);
+        return checkLineOfSightBetweenTwoLocations(this.location, location) && super.moveTo(location);
     }
 
     /**
@@ -34,15 +34,15 @@ public class Queen extends Piece {
     protected void updateThreateningLocation() {
         threateningLocations.clear();
 
-        super.updateVertical(1);
-        super.updateVertical(-1);
+        super.updateThreateningLocationsByVertical(1);
+        super.updateThreateningLocationsByVertical(-1);
 
-        super.updateHorizontal(1);
-        super.updateHorizontal(-1);
+        super.updateThreateningLocationsByHorizontal(1);
+        super.updateThreateningLocationsByHorizontal(-1);
 
-        super.updateDiagonal(1, 1);
-        super.updateDiagonal(-1, 1);
-        super.updateDiagonal(1, -1);
-        super.updateDiagonal(-1, -1);
+        super.updateThreateningLocationsByDiagonal(1, 1);
+        super.updateThreateningLocationsByDiagonal(-1, 1);
+        super.updateThreateningLocationsByDiagonal(1, -1);
+        super.updateThreateningLocationsByDiagonal(-1, -1);
     }
 }

@@ -36,11 +36,11 @@ public class TurnHandler {
         if (isPieceAt(location.getRow(), location.getCol())) {
             removePieceAt(location);
         }
-        if (piece.getChessLocation() != null) {
-            removePieceAt(piece.getChessLocation());
+        if (piece.getLocation() != null) {
+            removePieceAt(piece.getLocation());
         }
         board[location.getRow()][location.getCol()] = piece;
-        piece.setChessLocation(location);
+        piece.setLocation(location);
     }
 
     /**
@@ -82,7 +82,7 @@ public class TurnHandler {
             s += row;
             for (int col = 0; col < 8; col++) {
                 if (board[row][col] != null) {
-                    s += " " + board[row][col].getId();
+                    s += " " + board[row][col].getType();
                 } else {
                     s += " -";
                 }
