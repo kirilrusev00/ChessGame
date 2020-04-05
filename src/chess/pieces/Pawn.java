@@ -73,10 +73,10 @@ public class Pawn extends Piece {
 
         threateningLocations.clear();
 
-        if (location.getCol() >= 1) {
+        if (location.getCol() >= LAST_BUT_ONE_ROW_FOR_PLAYER2) {
             threateningLocations.add(new Location(location.getRow() + direction, location.getCol() - 1));
         }
-        if (location.getCol() <= 6) {
+        if (location.getCol() <= LAST_BUT_ONE_ROW_FOR_PLAYER1) {
             threateningLocations.add(new Location(location.getRow() + direction, location.getCol() + 1));
         }
     }

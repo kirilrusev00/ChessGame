@@ -7,12 +7,12 @@ import java.util.ArrayList;
 
 public abstract class Piece {
 
+    protected static final int BOARD_SIZE = 8;
     protected Game game;
     protected String owner;
     protected Location location;
     protected char type;
     protected ArrayList<Location> threateningLocations;
-    protected static int BOARD_SIZE = 8;
 
     protected abstract void updateThreateningLocation();
 
@@ -101,7 +101,7 @@ public abstract class Piece {
 
     protected void updateThreateningLocationsByVertical(int direction) {
         Location location = new Location(this.location.getRow() + direction, this.location.getCol());
-        while (TurnHandler.isLocationInBounds(location)) {
+        while (location.isInBoardBounds()) {
             Piece piece = game.getTurnHandler().getPieceAt(location);
             if (piece != null) {
                 if (!piece.getOwner().equalsIgnoreCase(owner)) {
@@ -119,7 +119,7 @@ public abstract class Piece {
 
     protected void updateThreateningLocationsByHorizontal(int direction) {
         Location location = new Location(this.location.getRow(), this.location.getCol() + direction);
-        while (TurnHandler.isLocationInBounds(location)) {
+        while (location.isInBoardBounds()) {
             Piece piece = game.getTurnHandler().getPieceAt(location);
             if (piece != null) {
                 if (!piece.getOwner().equalsIgnoreCase(owner)) {
@@ -138,7 +138,7 @@ public abstract class Piece {
     protected void updateThreateningLocationsByDiagonal(int rowDirection, int colDirection) {
         Location location = new Location(this.location.getRow() + rowDirection,
                 this.location.getCol() + colDirection);
-        while (TurnHandler.isLocationInBounds(location)) {
+        while (location.isInBoardBounds()) {
             Piece piece = game.getTurnHandler().getPieceAt(location);
             if (piece != null) {
                 if (!piece.getOwner().equalsIgnoreCase(owner)) {

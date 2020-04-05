@@ -36,7 +36,7 @@ public class Knight extends Piece {
         threateningLocations.clear();
         for (int i = 0; i < BOARD_SIZE; i++) {
             Location location = new Location(rowMoves[i], colMoves[i]);
-            if (TurnHandler.isLocationInBounds(location)) {
+            if (location.isInBoardBounds()) {
                 Piece piece = game.getTurnHandler().getPieceAt(location);
 
                 if (piece != null &&
