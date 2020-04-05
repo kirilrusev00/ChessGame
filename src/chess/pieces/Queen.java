@@ -4,12 +4,6 @@ import chess.playboard.Game;
 
 public class Queen extends Piece {
     
-    /**
-     * Creates a new Queen piece.
-     * @param owner Owner string.
-     * @param initialLocation Location to set Queen in.
-     * @param game Game that the Queen belongs too.
-     */
     public Queen(String owner, Location initialLocation, Game game) {
         super(owner, initialLocation, game);
         if (owner.equalsIgnoreCase("player1")) {
@@ -19,17 +13,10 @@ public class Queen extends Piece {
         }
     }
 
-    /** Checks if more is valid for Queen, then moves the piece.
-     * @return Valid move or not.
-     */
-    @Override
-    public boolean moveTo(Location location) {
-        return checkLineOfSightBetweenTwoLocations(this.location, location) && super.moveTo(location);
+    public boolean moveToIfPossible(Location location) {
+        return checkLineOfSightBetweenTwoLocations(this.location, location) && super.moveToIfPossible(location);
     }
 
-    /**
-     * Updates the threatening locations.
-     */
     @Override
     protected void updateThreateningLocation() {
         threateningLocations.clear();

@@ -4,12 +4,6 @@ import chess.playboard.Game;
 
 public class Rook extends Piece {
     
-    /**
-     * Creates a new Rook piece.
-     * @param owner Owner string.
-     * @param initialLocation Location to set Rook in.
-     * @param game Game that the Rook belongs too.
-     */
     public Rook(String owner, Location initialLocation, Game game) {
         super(owner, initialLocation, game);
         if (owner.equalsIgnoreCase("player1")) {
@@ -19,22 +13,16 @@ public class Rook extends Piece {
         }
     }
 
-    /** Checks if more is valid for Rook, then moves the piece.
-     * @return Valid move or not.
-     */
     @Override
-    public boolean moveTo(Location location) {
+    public boolean moveToIfPossible(Location location) {
         if ((this.location.getRow() == location.getRow()) !=
             (this.location.getCol() == location.getCol())) {
 
-            return checkLineOfSightBetweenTwoLocations(this.location, location) && super.moveTo(location);
+            return checkLineOfSightBetweenTwoLocations(this.location, location) && super.moveToIfPossible(location);
         }
         return false;
     }
 
-    /**
-     * Updates the threatening locations.
-     */
     @Override
     protected void updateThreateningLocation() {
         threateningLocations.clear();

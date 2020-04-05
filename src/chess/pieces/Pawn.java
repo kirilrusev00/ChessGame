@@ -4,78 +4,80 @@ import chess.playboard.Game;
 
 public class Pawn extends Piece {
 
+    private static final int FIRST_MOVE_LENGTH = 2;
     private boolean firstMove;
-    private int one;
+    private int direction;
 
-    /** 
-     * Constructs a new Pawn piece.
-     * @param owner Owner string.
-     * @param initialLocation Location to set Pawn in.
-     * @param game Game that the Pawn belongs too.
-     */
     public Pawn(String owner, Location initialLocation, Game game) {
         super(owner, initialLocation, game);
         if (owner.equalsIgnoreCase("player1")) {
             type = 'P';
-            one = 1;
+            direction = 1;
         } else if (owner.equalsIgnoreCase("player2")) {
             type = 'p';
-            one = -1;
+            direction = -1;
         }
         firstMove = true;
     }
 
-    /** Checks if more is valid for Pawns, then moves the piece.
-     * @return Valid move or not.
-     */
+    private boolean moveForwardWithOnePositionIfPossible() {
+        if (firstMove) {
+            firstMove = false;
+        }
+        return !game.getChessBoard().isPieceAt(location.getRow(), location.getCol())
+                && super.moveToIfPossible(location);
+    }
+
+    private boolean moveForwardWithTwoPositionsIfPossible() {
+        if (firstMove) {
+            firstMove = false;
+        }
+        return !game.getChessBoard().isPieceAt(location.getRow(), location.getCol())
+                && super.moveToIfPossible(location);
+    }
+
     @Override
-    public boolean moveTo(Location location) {
+    public boolean moveToIfPossible(Location location) {
         if (location.getCol() == this.location.getCol()) {
-            if (location.getRow() - this.location.getRow() == one) {
-                if (firstMove) {
-                    firstMove = false;
-                }
-                return !game.getChessBoard().isPieceAt(location.getRow(), location.getCol()) && super.moveTo(location);
-            } else if (firstMove && (location.getRow() - this.location.getRow() == (one * 2))) {
-                if (firstMove) {
-                    firstMove = false;
-                }
-                return !game.getChessBoard().isPieceAt(location.getRow(), location.getCol()) && super.moveTo(location);
+            if (location.getRow() - this.location.getRow() == direction) {
+                return moveForwardWithOnePositionIfPossible();
+            } else if (firstMove && (location.getRow() - this.location.getRow() == (direction * FIRST_MOVE_LENGTH))) {
+                return moveForwardWithTwoPositionsIfPossible();
             }
         } else if (Math.abs(location.getCol() - this.location.getCol()) == 1) {
             if (game.getChessBoard().isPieceAt(location.getRow(), location.getCol()) &&
-                location.getRow() - this.location.getRow() == one) {
+                    location.getRow() - this.location.getRow() == direction) {
 
                 if (firstMove) {
                     firstMove = false;
                 }
-                return super.moveTo(location);
+                return super.moveToIfPossible(location);
             }
         }
         return false;
     }
 
-    /**
-     * Updates the threatening locations.
-     */
     @Override
     protected void updateThreateningLocation() {
-        int one = 0;
-        if (owner.equalsIgnoreCase("player1") &&
-            location.getRow() <= 6) {
-            one = 1;
-        } else if (owner.equalsIgnoreCase("player2") &&
-                    location.getRow() >= 1) {
-            one = -1;
+        final int LAST_BUT_ONE_ROW_FOR_PLAYER1 = 6;
+        final int LAST_BUT_ONE_ROW_FOR_PLAYER2 = 1;
+        int direction = 0;
+
+        if (owner.equalsIgnoreCase("player1")
+                && location.getRow() <= LAST_BUT_ONE_ROW_FOR_PLAYER1) {
+            direction = 1;
+        } else if (owner.equalsIgnoreCase("player2")
+                && location.getRow() >= LAST_BUT_ONE_ROW_FOR_PLAYER2) {
+            direction = -1;
         }
 
         threateningLocations.clear();
 
         if (location.getCol() >= 1) {
-            threateningLocations.add(new Location(location.getRow() + one, location.getCol() - 1));
+            threateningLocations.add(new Location(location.getRow() + direction, location.getCol() - 1));
         }
         if (location.getCol() <= 6) {
-            threateningLocations.add(new Location(location.getRow() + one, location.getCol() + 1));
+            threateningLocations.add(new Location(location.getRow() + direction, location.getCol() + 1));
         }
     }
 }

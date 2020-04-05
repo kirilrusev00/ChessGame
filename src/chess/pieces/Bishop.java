@@ -4,13 +4,8 @@ import chess.playboard.Game;
 
 public class Bishop extends Piece {
     
-    /** Creates a new Bishop piece.
-     * @param owner Owner string.
-     * @param initialLocation Location to set Bishop in.
-     * @param game Game that the Bishop belongs too.
-     */
-    public Bishop(String owner, Location initialLocation, Game game) {
-        super(owner, initialLocation, game);
+    public Bishop(String owner, Location location, Game game) {
+        super(owner, location, game);
         if (owner.equalsIgnoreCase("player1")) {
             type = 'B';
         } else if (owner.equalsIgnoreCase("player2")) {
@@ -18,22 +13,16 @@ public class Bishop extends Piece {
         }
     }
 
-    /** Checks if more is valid for Bishop, then moves the piece.
-     * @return Valid move or not.
-     */
     @Override
-    public boolean moveTo(Location location) {
+    public boolean moveToIfPossible(Location location) {
         if (Math.abs(this.location.getRow() - location.getRow()) ==
             Math.abs(this.location.getCol() - location.getCol())) {
             
-            return checkLineOfSightBetweenTwoLocations(this.location, location) && super.moveTo(location);
+            return checkLineOfSightBetweenTwoLocations(this.location, location) && super.moveToIfPossible(location);
         }
         return false;
     }
 
-    /**
-     * Updates the threatening locations.
-     */
     @Override
     protected void updateThreateningLocation() {
         threateningLocations.clear();

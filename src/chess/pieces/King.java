@@ -4,12 +4,7 @@ import chess.playboard.TurnHandler;
 import chess.playboard.Game;
 
 public class King extends Piece {
-    /**
-     * Creates a King piece.
-     * @param owner Owner string.
-     * @param initialLocation Location to set King in.
-     * @param game Game that the King belongs too.
-     */
+
     public King(String owner, Location initialLocation, Game game) {
         super(owner, initialLocation, game);
         if (owner.equalsIgnoreCase("player1")) {
@@ -19,28 +14,23 @@ public class King extends Piece {
         }
     }
 
-    /** Checks if more is valid for King, then moves the piece.
-     * @return Valid move or not.
-     */
     @Override
-    public boolean moveTo(Location location) {
+    public boolean moveToIfPossible(Location location) {
         if (Math.abs(this.location.getRow() - location.getRow()) <= 1 &&
             Math.abs(this.location.getCol() - location.getCol()) <= 1) {
 
-            return checkLineOfSightBetweenTwoLocations(this.location, location) && super.moveTo(location);
+            return checkLineOfSightBetweenTwoLocations(this.location, location) && super.moveToIfPossible(location);
         }
         return false;
     }
 
-    /**
-     * Updates the threatening locations.
-     */
     @Override
     protected void updateThreateningLocation() {
         threateningLocations.clear();
-        for (int row = -1; row >= 1; row++) {
-            for (int col = -1; col >= 1; col++) {
-                Location location = new Location(this.location.getRow() + row, this.location.getCol() + col);
+        for (int row = -1; row <= 1; row++) {
+            for (int col = -1; col <= 1; col++) {
+                Location location = new Location(this.location.getRow() + row,
+                        this.location.getCol() + col);
                 if (TurnHandler.locationInBounds(location)) {
                     Piece piece = game.getChessBoard().getPieceAt(location);
                     if (piece != null &&
@@ -53,14 +43,10 @@ public class King extends Piece {
         }
     }
 
-    /**
-     * Finds the piece if there is on that puts the king in danger
-     * @return First piece found to put king in danger
-     */
-    public Piece check() {
+    public Piece getPieceThreateningKing() {
         TurnHandler board = game.getChessBoard();
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
                 Piece piece = board.getPieceAt(new Location(row, col));
                 if (piece != null &&
                     !piece.getOwner().equals(owner)) {

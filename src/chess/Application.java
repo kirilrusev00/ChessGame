@@ -56,7 +56,7 @@ public class Application {
                     currentPiece = getCurrentPiece(turnHandler, currentPlayer);
                     newLocation = getNewLocation();
 
-                    if (currentPiece.moveTo(newLocation)) {
+                    if (currentPiece.moveToIfPossible(newLocation)) {
                         currentPlayer = (currentPlayer.equalsIgnoreCase("player1")) ? "player2": "player1"; 
                     } else {
                         System.out.println("Move was invalid, try again.");

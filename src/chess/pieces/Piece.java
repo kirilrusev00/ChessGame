@@ -12,6 +12,7 @@ public abstract class Piece {
     protected Location location;
     protected char type;
     protected ArrayList<Location> threateningLocations;
+    protected static int BOARD_SIZE = 8;
 
     protected abstract void updateThreateningLocation();
 
@@ -154,7 +155,7 @@ public abstract class Piece {
         }
     }
 
-    public boolean moveTo(Location newLocation) {
+    public boolean moveToIfPossible(Location newLocation) {
         TurnHandler board = game.getChessBoard();
         Piece oldPiece = board.getPieceAt(newLocation);
 
